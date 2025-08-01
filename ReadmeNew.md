@@ -26,7 +26,7 @@ Skylar E. Stolte<sup>1</sup>, Aprinda Indahlastari<sup>2,3</sup>, Jason Chen<sup
 <sup>6</sup>Dept. of Electrical & Computer Engineering, UF  
 
 *Imaging NeuroScience*  
-📄 [Paper (TBD)](https://direct.mit.edu/imag/article/doi/10.1162/imag_a_00090/119208/Precise-and-rapid-whole-head-segmentation-from) | 💻 [Code](https://github.com/lab-smile/GRACE)
+📄 [Paper](https://direct.mit.edu/imag/article/doi/10.1162/imag_a_00090/119208/Precise-and-rapid-whole-head-segmentation-from) | 💻 [Code](https://github.com/lab-smile/GRACE)
 
 ---
 
