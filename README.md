@@ -47,11 +47,7 @@ Imaging NeuroScience<br>
 ## Usage
 
 ### Pretrained Models
-Our pretrained model can be found at the v1.0.0 release of this GitHub or at either of the following two links:
-
-- Google Drive: https://drive.google.com/file/d/1C_oidhimoReTV_learRM4-6SX4EEPidu/view?usp=sharing
-
-- Dropbox: https://www.dropbox.com/scl/fi/8i75chjrs0alpfpb7ni3j/GRACE.pth?rlkey=jx8ltbinher52r0cfly3pm3ns&dl=0
+Our pretrained model can be found at the v1.0.1 release of this GitHub.
 
 ### MATLAB Segmentation Label Preparation
 You can find there are two MATLAB codes, you can directly change the directory to your own data. You need to select the GRACE working folder and add to path before you running these two MATLAB codes. 
@@ -76,10 +72,10 @@ The GRACE code uses the MONAI, an open-source foundation. We provide a .sh scrip
 
 Run the following code in the terminal, you need to change the line after --sandbox to your desired writable directory and change the line after --nv to your own directory.
 ```
-./build_container_v08.sh
+./build_container_v150.sh
 ```
 
-The output should be a folder named monaicore08 under your desired directory.
+The output should be a folder named monaicore150 under your desired directory.
 
 ### Training
 Once the data and the container are ready, you can train the model by using the following command:
@@ -87,8 +83,8 @@ Once the data and the container are ready, you can train the model by using the 
 ./train.sh
 ```
 Before you training the model, you need to make sure change the following directory:
-- change the first singularity exec -nv to the directory includes monaicore08, for example: /user/GRACE/monaicore08
-- change the line after --bind to the directory includes monaicore08
+- change the first singularity exec -nv to the directory includes monaicore150, for example: /user/GRACE/monaicore150
+- change the line after --bind to the directory includes monaicore150
 - change the data_dir to your data directory
 - change the model name to your desired model name
 You can also specify the max iteration number for training. For the iterations = 100, the training progress might take about one hours, and for the iterations = 25,000, the training progress might take about 24 hours. 
