@@ -62,40 +62,90 @@ cd GRACE
 
 ## 5. Usage
 
-### MATLAB Segmentation Label Preparation
+### Data Preparation
 
-1. Change directory paths inside each MATLAB script to point at your data.
-2. Add the GRACE working folder to your MATLAB path.
-3. Run `combine_mask.m`.
-
-   * **MATLAB 2020b** users must modify line 56 in `combine_mask.m`:
-
-     ```matlab
-     image(index) = tissue_cond_updated.Labels(k);
-     ```
-4. After completion, your **`Data/`** folder will have this structure:
+1. **Organize your data folder** to have this structure:
 
    ```
-   Data/
-   ├── ImagesTr/
-   │   ├── sub-TrX_T1.nii
+   YourData/
+   ├── images/
+   │   ├── img1.nii
+   │   ├── img2.nii
    │   └── …
-   ├── ImagesTs/
-   │   ├── sub-TsX_T1.nii
-   │   └── …
-   ├── LabelsTr/
-   │   ├── sub-TrX_seg.nii
-   │   └── …
-   └── LabelsTs/
-       ├── sub-TsX_seg.nii
+   └── labels/
+       ├── img1.nii
+       ├── img2.nii
        └── …
    ```
-5. In MATLAB, run:
-
-   ```matlab
-   make_datalist_json.m
+   
+2. **Make the setup script executable** and run it:
+   ```bash
+   # Make executable (first time only)
+   chmod +x setup.sh
+   
+   # Run with default settings (90% train, 10% test, seed=42)
+   ./setup.sh --data-dir YourData
+   
+   # Or customize the parameters
+   ./setup.sh --data-dir YourData --split-ratio 0.8 --random-seed 123
    ```
-6. Exit MATLAB and proceed below.
+
+3. **Available options:**
+   ```bash
+   ./setup.sh --help
+   
+   Options:
+     -d, --data-dir DIR       Data directory containing images/ and labels/ folders
+     -s, --split-ratio RATIO  Train/test split ratio (0.0-1.0, default: 0.9)
+     -r, --random-seed SEED   Random seed for reproducibility (default: 42)
+     -h, --help              Show help message
+   ```
+
+4. **Examples:**
+   ```bash
+   # Use default 90/10 split with seed 42
+   ./setup.sh -d ./MyData
+   
+   # Custom 80/20 split with different seed
+   ./setup.sh -d /path/to/data -s 0.8 -r 456
+   
+   # Full parameter specification
+   ./setup.sh --data-dir ./GRACE_Data --split-ratio 0.85 --random-seed 2024
+   ```
+
+5. **What the script does:**
+   - Creates isolated virtual environment
+   - Installs required packages (scikit-learn, tqdm, numpy)
+   - Splits data into train/test sets with your specified ratio
+   - Creates dataset.json for training
+   - Generates detailed logs of the process
+   - Cleans up virtual environment automatically
+
+6. **Output structure** after running setup:
+   ```
+   ./
+   ├── imagesTr/
+   │   ├── file1.nii
+   │   ├── file2.nii
+   │   └── …
+   ├── imagesTs/
+   │   ├── file50.nii
+   │   └── …
+   ├── labelsTr/
+   │   ├── file1.nii
+   │   ├── file2.nii
+   │   └── …
+   ├── labelsTs/
+   │   ├── file50.nii
+   │   └── …
+   ├── dataset.json
+   ├── data_split_YYYYMMDD_HHMMSS.log
+   └── dataset_creation_YYYYMMDD_HHMMSS.log
+   ```
+
+**Platform Support:**
+- Linux/macOS: Run directly in terminal
+- Windows: Run in Git Bash or WSL terminal
 
 ---
 
