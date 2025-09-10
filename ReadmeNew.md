@@ -149,38 +149,90 @@ cd GRACE
 
 ---
 
-### Build Container
+### Training GRACE on Your Data
 
-GRACE runs inside a Singularity container with MONAI and dependencies pre-installed:
+Choose your training environment based on your system:
 
-```bash
-./build_container_v08.sh
-```
+| Environment | Best For | Requirements | Setup Time |
+|-------------|----------|--------------|------------|
+| 🐋 **Docker** | Most users, cross-platform | Docker installed | ~5 min |
+| 📦 **Singularity** | HPC clusters, shared systems | Singularity/Apptainer | ~10 min |
+| 🐍 **Native Python** | Developers, custom setups | Python 3.8+, CUDA drivers | ~15 min |
 
-> **Edit** `build_container_v08.sh` first:
->
-> * `--sandbox` → desired output directory
-> * `--nv`      → path to your own directory
-
-Output: a folder named `monaicore08/`.
-
----
-
-### Training
-
-Once Data and container are ready:
+#### Quick Start
 
 ```bash
-./train.sh
+# Make the script executable
+chmod +x train.sh
+
+# Docker training (recommended for most users)
+./train.sh --docker --data_dir /path/to/your/data
+
+# Singularity training (for HPC/cluster environments)  
+./train.sh --singularity --data_dir /path/to/your/data
+
+# Native Python training (for development/custom setups)
+./train.sh --python --data_dir /path/to/your/data
 ```
 
-**Before running**, edit `train.sh` to update:
+#### Training Options
 
-* `singularity exec --nv /path/to/monaicore08`
-* `--bind /path/to/monaicore08`
-* `data_dir=/path/to/your/Data`
-* `model_save_name=YOUR_MODEL_NAME`
-* Optional: `--max_iter` (e.g., 100 for \~1 hr, 25 000 for \~24 hr)
+```bash
+# Basic training parameters
+./train.sh --docker \
+  --data_dir /path/to/data \
+  --num_gpu 2 \
+  --max_iteration 25000 \
+  --model_save_name my_grace_model
+
+# GPU control
+./train.sh --singularity --allow-cpu      # Allow CPU fallback if no GPU
+./train.sh --docker --require-gpu         # Require GPU (fail if unavailable)
+
+# Container management
+./train.sh --docker --rebuild-docker      # Force rebuild Docker image
+./train.sh --singularity                  # Auto-builds container if missing
+
+# Background execution
+nohup ./train.sh --docker --data_dir /data > training.log 2>&1 &
+```
+
+#### Available Parameters
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `--data_dir PATH` | Path to your data folder | `./data_folder/` |
+| `--num_gpu NUM` | Number of GPUs to use | `1` |
+| `--max_iteration NUM` | Maximum training iterations | `1000` |
+| `--model_save_name NAME` | Model save name | `grace` |
+| `--N_classes NUM` | Number of segmentation classes | `12` |
+| `--a_min_value NUM` | Min intensity normalization | `0` |
+| `--a_max_value NUM` | Max intensity normalization | `255` |
+
+<!-- #### What the Script Does Automatically
+
+ **Container Management**: Builds Docker images or Singularity containers if missing  
+ **Environment Setup**: Creates Python virtual environments with required packages  
+ **GPU Detection**: Tests GPU availability and handles CPU fallback  
+ **Data Mounting**: Mounts your data directory as `/mnt/data` inside containers  
+ **Error Handling**: Provides clear error messages and troubleshooting guidance   -->
+
+#### Platform-Specific Notes
+
+**Docker Users:**
+- Requires NVIDIA Container Toolkit for GPU support
+- Images are built automatically from MONAI base image
+- Use `--rebuild-docker` to force image rebuild
+
+**Singularity Users:**  
+- Perfect for HPC systems without root access
+- Containers auto-build if `SINGULARITY_CONTAINER` is empty
+- Edit `SINGULARITY_CONTAINER` path in script for existing containers
+
+**Python Users:**
+- Auto-detects conda environments or creates virtual environments
+- Installs missing packages automatically
+- Best for development and debugging
 
 ---
 

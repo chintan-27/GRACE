@@ -1,0 +1,10 @@
+monai==1.5.0
+torch
+torchvision
+einops
+nibabel
+matplotlib
+pandas
+numpy
+scikit-learn
+tqdm
